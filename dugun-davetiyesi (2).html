@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bize Katılın! 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #FF6F91;
+    --sunny: #FFC75F;
+    --teal: #3AAFA9;
+    --cream: #FFF8EE;
+    --plum: #3D2C4B;
+    --grape: #9B5DE5;
+    --paper: #FFFDF9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(160deg, var(--sunny) 0%, var(--coral) 45%, var(--grape) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-x: hidden;
+    color: var(--plum);
+  }
+
+  /* ---------- ENVELOPE ---------- */
+  #envelope-stage {
+    position: relative;
+    width: 340px;
+    height: 240px;
+    perspective: 1200px;
+    cursor: pointer;
+  }
+
+  #envelope-stage.hidden { display: none; }
+
+  .envelope-body {
+    position: absolute;
+    inset: 0;
+    background: var(--paper);
+    border-radius: 10px;
+    box-shadow: 0 20px 40px rgba(61,44,75,0.35);
+    overflow: hidden;
+  }
+
+  .envelope-body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, transparent 49.5%, rgba(61,44,75,0.06) 50%),
+      linear-gradient(-135deg, transparent 49.5%, rgba(61,44,75,0.06) 50%);
+  }
+
+  .flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 50%;
+    background: linear-gradient(135deg, var(--coral), var(--grape));
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 0.9s cubic-bezier(.6,-0.28,.44,1.4);
+    z-index: 3;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  #envelope-stage.open .flap {
+    transform: rotateX(180deg);
+  }
+
+  .seal {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54px; height: 54px;
+    background: radial-gradient(circle at 35% 30%, #FFD98E, var(--sunny) 60%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 4;
+    transition: opacity 0.4s ease;
+  }
+
+  #envelope-stage.open .seal { opacity: 0; pointer-events: none; }
+
+  .hint {
+    position: absolute;
+    bottom: -38px;
+    left: 0; right: 0;
+    text-align: center;
+    color: var(--paper);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    animation: bounce 1.6s infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  .peek {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 6%;
+    top: 20%;
+    background: var(--paper);
+    border-radius: 6px;
+    box-shadow: 0 -6px 12px rgba(0,0,0,0.08);
+    z-index: 1;
+    transition: transform 0.7s ease 0.15s;
+    transform: translateY(90%);
+  }
+
+  #envelope-stage.open .peek { transform: translateY(8%); }
+
+  /* ---------- CARD ---------- */
+  #card {
+    display: none;
+    max-width: 460px;
+    width: 100%;
+    background: var(--paper);
+    border-radius: 22px;
+    box-shadow: 0 25px 60px rgba(61,44,75,0.4);
+    overflow: hidden;
+    animation: rise 0.7s cubic-bezier(.2,.8,.2,1);
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(40px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .card-header {
+    background: linear-gradient(120deg, var(--coral), var(--grape) 60%, var(--teal));
+    padding: 38px 28px 46px;
+    text-align: center;
+    position: relative;
+    color: var(--paper);
+  }
+
+  .card-header .eyebrow {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  .card-header h1 {
+    font-family: 'Caveat', cursive;
+    font-size: 58px;
+    line-height: 1.05;
+    margin-top: 6px;
+    text-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+
+  .card-header .amp {
+    font-family: 'Caveat', cursive;
+    font-size: 34px;
+    display: block;
+    opacity: 0.9;
+  }
+
+  .confetti-strip {
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 24px;
+    background: var(--paper);
+    clip-path: polygon(0% 100%, 5% 40%, 10% 100%, 15% 40%, 20% 100%, 25% 40%, 30% 100%, 35% 40%, 40% 100%, 45% 40%, 50% 100%, 55% 40%, 60% 100%, 65% 40%, 70% 100%, 75% 40%, 80% 100%, 85% 40%, 90% 100%, 95% 40%, 100% 100%);
+  }
+
+  .card-body {
+    padding: 30px 28px 10px;
+    text-align: center;
+  }
+
+  .card-body p.lead {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: #5b4d68;
+    margin-bottom: 18px;
+  }
+
+  .datebox {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin: 18px 0 22px;
+    flex-wrap: wrap;
+  }
+
+  .datebox .pill {
+    background: #FFF1DC;
+    border: 2px dashed var(--sunny);
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    color: var(--plum);
+    font-size: 14px;
+    min-width: 110px;
+  }
+
+  .datebox .pill span {
+    display: block;
+    font-size: 20px;
+    color: var(--coral);
+    margin-top: 2px;
+  }
+
+  .section {
+    padding: 18px 28px 26px;
+    border-top: 1px solid #f0e6f5;
+  }
+
+  .section h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 19px;
+    color: var(--grape);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .map-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 3px solid #FFE3B0;
+    margin-bottom: 12px;
+  }
+
+  .map-wrap iframe { display: block; width: 100%; height: 200px; border: 0; }
+
+  .address {
+    font-size: 14px;
+    color: #5b4d68;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .maps-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: var(--teal);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    transition: transform 0.2s ease;
+  }
+  .maps-btn:hover { transform: translateY(-2px); }
+
+  /* ---------- RSVP FORM ---------- */
+  form#rsvp {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+  }
+
+  form#rsvp label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--plum);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  form#rsvp input[type="text"],
+  form#rsvp input[type="number"],
+  form#rsvp textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 2px solid #EFE0F5;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  form#rsvp input:focus, form#rsvp textarea:focus {
+    border-color: var(--coral);
+  }
+
+  .choice-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .choice-group label {
+    flex: 1;
+    text-align: center;
+    padding: 10px 8px;
+    border: 2px solid #EFE0F5;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: #5b4d68;
+    transition: all 0.2s ease;
+  }
+
+  .choice-group input { display: none; }
+
+  .choice-group input:checked + span {
+    color: var(--paper);
+  }
+
+  .choice-group label:has(input:checked) {
+    background: var(--coral);
+    border-color: var(--coral);
+    color: white;
+  }
+
+  #rsvp button {
+    margin-top: 6px;
+    background: linear-gradient(120deg, var(--grape), var(--coral));
+    color: white;
+    border: none;
+    padding: 13px;
+    border-radius: 999px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  #rsvp button:hover { transform: translateY(-2px); }
+  #rsvp button:active { transform: translateY(0); }
+
+  #thanks {
+    display: none;
+    text-align: center;
+    padding: 10px 4px 4px;
+  }
+
+  #thanks .emoji { font-size: 40px; }
+
+  #thanks h3 {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--grape);
+    margin: 8px 0 6px;
+  }
+
+  #thanks p { font-size: 14px; color: #5b4d68; }
+
+  footer {
+    text-align: center;
+    padding: 18px;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--coral);
+  }
+</style>
+</head>
+<body>
+
+<div id="envelope-stage">
+  <div class="envelope-body">
+    <div class="peek"></div>
+    <div class="flap"></div>
+    <div class="seal">💌</div>
+  </div>
+  <div class="hint">Açmak için dokunun</div>
+</div>
+
+<div id="card">
+  <div class="card-header">
+    <div class="eyebrow">Bizimle kutlayın</div>
+    <h1>Ayşe <span class="amp">&amp;</span> Mehmet</h1>
+    <div class="confetti-strip"></div>
+  </div>
+
+  <div class="card-body">
+    <p class="lead">Hayatımızın en güzel gününde yanımızda olmanızı çok isteriz! 🎉🥂</p>
+
+    <div class="datebox">
+      <div class="pill">Tarih<span>12 Eylül 2026</span></div>
+      <div class="pill">Saat<span>18:00</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📍 Konum</h2>
+    <div class="map-wrap">
+      <iframe src="https://www.google.com/maps?q=Istanbul&output=embed" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <p class="address">Zümrüt Davet Salonu, Bağdat Cd. No:123, Kadıköy / İstanbul</p>
+    <a class="maps-btn" href="https://www.google.com/maps?q=Zümrüt+Davet+Salonu+Kadıköy+İstanbul" target="_blank" rel="noopener">Yol Tarifi Al →</a>
+  </div>
+
+  <div class="section">
+    <h2>💌 Katılım Bildirimi (RSVP)</h2>
+    <form id="rsvp">
+      <div>
+        <label for="name">Ad Soyad</label>
+        <input type="text" id="name" required placeholder="Adınız ve soyadınız">
+      </div>
+
+      <div>
+        <label>Katılım Durumu</label>
+        <div class="choice-group">
+          <label><input type="radio" name="attend" value="yes" checked><span>Geliyorum 🎉</span></label>
+          <label><input type="radio" name="attend" value="no"><span>Gelemiyorum 😢</span></label>
+        </div>
+      </div>
+
+      <div>
+        <label for="guests">Kişi Sayısı (siz dahil)</label>
+        <input type="number" id="guests" min="1" max="10" value="1">
+      </div>
+
+      <div>
+        <label for="note">Not (opsiyonel)</label>
+        <textarea id="note" rows="2" placeholder="Örn: özel diyet, tebrik mesajı..."></textarea>
+      </div>
+
+      <button type="submit">Cevabımı Gönder</button>
+    </form>
+
+    <div id="thanks">
+      <div class="emoji">🎊</div>
+      <h3>Teşekkürler!</h3>
+      <p>Cevabınız alındı, sizi görmek için sabırsızlanıyoruz!</p>
+    </div>
+  </div>
+
+  <footer>Sevgiyle bekliyoruz 💕</footer>
+</div>
+
+<script>
+  const stage = document.getElementById('envelope-stage');
+  const card = document.getElementById('card');
+
+  stage.addEventListener('click', () => {
+    if (stage.classList.contains('open')) return;
+    stage.classList.add('open');
+    setTimeout(() => {
+      stage.classList.add('hidden');
+      card.style.display = 'block';
+    }, 750);
+  });
+
+  const form = document.getElementById('rsvp');
+  const thanks = document.getElementById('thanks');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  // Google Apps Script Web App URL — RSVP cevapları buraya gönderilip Sheet'e yazılıyor
+  const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwNXgGqqUFCNXZKMfI2zXt1fLKydi1sAYqmrhJ5qUUOUA-Df0OxcMDNv084kEYFeD5F/exec';
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const payload = {
+      name: document.getElementById('name').value,
+      attend: form.querySelector('input[name="attend"]:checked').value === 'yes' ? 'Geliyor' : 'Gelemiyor',
+      guests: document.getElementById('guests').value,
+      note: document.getElementById('note').value
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Gönderiliyor...';
+
+    fetch(SHEET_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script CORS başlığı döndürmediği için gerekli
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    })
+      .then(() => {
+        form.style.display = 'none';
+        thanks.style.display = 'block';
+      })
+      .catch(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Cevabımı Gönder';
+        alert('Bir sorun oluştu, lütfen tekrar deneyin.');
+      });
+  });
+</script>
+
+</body>
+</html>
